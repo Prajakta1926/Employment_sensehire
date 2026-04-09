@@ -3,11 +3,11 @@ import { useState } from "react";
 
 export default function F03() {
   const [values, setValues] = useState({
-    communication: 50,
-    technical: 50,
-    teamwork: 50,
-    leadership: 50,
-    problemSolving: 50,
+    reading: 3,
+    speaking: 3,
+    fineMotor: 3,
+    focus: 3,
+    hearing: 3,
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -19,45 +19,53 @@ export default function F03() {
     }));
   };
 
-  // ✅ SMART DESCRIPTION
+  // ✅ DESCRIPTION (1–5 SCALE)
   const getDescription = (key, val) => {
     const map = {
-      communication: [
-        "Struggles to communicate clearly",
-        "Can explain ideas in most situations",
-        "Excellent communicator and presenter",
+      reading: [
+        "Struggles to read basic text",
+        "Can read simple content",
+        "Comfortable reading most content",
+        "Reads complex material well",
+        "Excellent comprehension skills",
       ],
-      technical: [
-        "Basic technical understanding",
-        "Comfortable with core concepts",
-        "Strong technical expertise",
+      speaking: [
+        "Difficulty expressing thoughts",
+        "Basic communication ability",
+        "Clear in normal conversations",
+        "Confident speaker",
+        "Excellent public speaker",
       ],
-      teamwork: [
-        "Prefers working alone",
-        "Collaborates when needed",
-        "Excellent team player",
+      fineMotor: [
+        "Difficulty with hand movements",
+        "Basic coordination",
+        "Good control in daily tasks",
+        "Precise movements",
+        "Highly skilled motor control",
       ],
-      leadership: [
-        "Avoids leadership roles",
-        "Can lead small tasks",
-        "Strong leadership presence",
+      focus: [
+        "Easily distracted",
+        "Short attention span",
+        "Average focus ability",
+        "Good concentration",
+        "Highly focused for long tasks",
       ],
-      problemSolving: [
-        "Needs help solving problems",
-        "Solves common problems",
-        "Excellent analytical thinker",
+      hearing: [
+        "Difficulty hearing sounds",
+        "Hears basic sounds",
+        "Normal hearing ability",
+        "Good clarity in noisy areas",
+        "Excellent auditory perception",
       ],
     };
 
-    if (val < 30) return map[key][0];
-    if (val < 70) return map[key][1];
-    return map[key][2];
+    return map[key][val - 1];
   };
 
-  // ✅ SCORE
+  // ✅ SCORE (convert to 100 scale)
   const getScore = () => {
     const vals = Object.values(values);
-    return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
+    return Math.round((vals.reduce((a, b) => a + b, 0) / (vals.length * 5)) * 100);
   };
 
   // ✅ SUBMIT
@@ -85,7 +93,7 @@ export default function F03() {
 
       {submitted ? (
         <div className="success">
-          🎉 Data submitted successfully!
+          🎉 Ability vector saved successfully!
           <p>Score: {getScore()} / 100</p>
         </div>
       ) : (
@@ -99,8 +107,8 @@ export default function F03() {
 
               <input
                 type="range"
-                min="0"
-                max="100"
+                min="1"
+                max="5"
                 value={values[key]}
                 onChange={(e) =>
                   handleChange(key, Number(e.target.value))
@@ -108,12 +116,11 @@ export default function F03() {
               />
 
               <p>
-                {values[key]} — {getDescription(key, values[key])}
+                Level {values[key]} — {getDescription(key, values[key])}
               </p>
             </div>
           ))}
 
-          {/* ✅ SCORE DISPLAY */}
           <div className="summary">
             <h3>Overall Score: {getScore()} / 100</h3>
           </div>
